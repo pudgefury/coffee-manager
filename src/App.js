@@ -10,18 +10,37 @@ const abi = contract;
 function App() {
   const [address, setAddress] = useState("");
   const [currentAccount, setCurrentAccount] = useState("");
+  const [amount, setAmount] = useState("-");
+
+  //(where: { addr: "${currentAccount}" })
 
   const _QUERY_COFFEE = gql`
-  query MyQuery {
-    coffees(where: { addr: "${currentAccount}" }) {
-      id
-      addr
-      amount
+    query MyQuery {
+      coffees {
+        id
+        addr
+        amount
+      }
     }
-  }
-`;
+  `;
 
   const Coffee = useQuery(_QUERY_COFFEE);
+
+  useEffect(() => {
+    if (!Coffee.loading) {
+      const result = Coffee.data.coffees.find(
+        (item) => item.addr === currentAccount
+      );
+      setAmount(result.amount);
+    }
+  }, [Coffee.loading, Coffee.data]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      Coffee.refetch();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -175,7 +194,7 @@ function App() {
       <h1>CoffeeManager</h1>
       <div>{currentAccount ? currentAccount : connectWalletButton()}</div>
       <div style={{ marginTop: "100px", fontSize: "24px" }}>
-        Coffee Count: {!Coffee.loading && Coffee.data.coffees.length && Coffee.data.coffees[0].amount || "--"}
+        Coffee Count: {amount}
       </div>
       <div style={{ marginTop: "50px" }}>
         Address:{" "}
