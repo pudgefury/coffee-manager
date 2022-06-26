@@ -27,11 +27,12 @@ function App() {
   const Coffee = useQuery(_QUERY_COFFEE);
 
   useEffect(() => {
-    if (!Coffee.loading) {
+    if (!Coffee.loading && Coffee.data.coffees.length) {
       const result = Coffee.data.coffees.find(
         (item) => item.addr === currentAccount
       );
-      setAmount(result.amount);
+      
+      if(result != undefined) setAmount(result.amount);
     }
   }, [Coffee.loading, Coffee.data]);
 
@@ -58,6 +59,7 @@ function App() {
       const account = accounts[0];
       console.log("Found an authorized account: ", account);
       setCurrentAccount(account);
+      Coffee.refetch();
     } else {
       console.log("No authorized account found");
     }
@@ -76,6 +78,7 @@ function App() {
       });
       console.log("Found an account! Address: ", accounts[0]);
       setCurrentAccount(accounts[0]);
+      Coffee.refetch();
     } catch (err) {
       console.log(err);
     }
