@@ -27,12 +27,12 @@ function App() {
   const Coffee = useQuery(_QUERY_COFFEE);
 
   useEffect(() => {
-    if (!Coffee.loading && Coffee.data.coffees.length) {
+    if (!Coffee.loading) {
       const result = Coffee.data.coffees.find(
         (item) => item.addr === currentAccount
       );
       
-      if(result != undefined) setAmount(result.amount);
+      if(result !== undefined) setAmount(result.amount);
     }
   }, [Coffee.loading, Coffee.data]);
 
