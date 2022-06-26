@@ -175,7 +175,7 @@ function App() {
       <h1>CoffeeManager</h1>
       <div>{currentAccount ? currentAccount : connectWalletButton()}</div>
       <div style={{ marginTop: "100px", fontSize: "24px" }}>
-        {/* Coffee Count: {!Coffee.loading && !Coffee.error && Coffee.data.coffees[0].amount} */}
+        Coffee Count: {!Coffee.loading && !Coffee.error && Coffee.data.length && Coffee.data.coffees[0].amount}
       </div>
       <div style={{ marginTop: "50px" }}>
         Address:{" "}
