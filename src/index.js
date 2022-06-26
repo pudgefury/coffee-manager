@@ -7,7 +7,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 const client = new ApolloClient({
-  uri: "https://api.studio.thegraph.com/query/29887/coffeemanager/v0.0.2",
+  uri: "https://api.studio.thegraph.com/query/29887/coffee-manager/v0.0.3",
   cache: new InMemoryCache(),
 });
 

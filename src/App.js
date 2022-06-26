@@ -4,7 +4,7 @@ import contract from "./contracts/abi.json";
 import { ethers } from "ethers";
 import { useQuery, gql } from "@apollo/client";
 
-const contractAddress = "0x1198a5A605aA9e330C0e5abaEeB947E302d4ADB0";
+const contractAddress = "0x58347b54A77C48512bF09a3E53064fb012D5006c";
 const abi = contract;
 
 function App() {
@@ -25,14 +25,15 @@ function App() {
   `;
 
   const Coffee = useQuery(_QUERY_COFFEE);
+  console.log(Coffee);
 
   useEffect(() => {
-    if (!Coffee.loading) {
+    if (!Coffee.loading && Coffee.data) {
       const result = Coffee.data.coffees.find(
         (item) => item.addr === currentAccount
       );
-      
-      if(result !== undefined) setAmount(result.amount);
+
+      if (result !== undefined) setAmount(result.amount);
     }
   }, [Coffee.loading, Coffee.data]);
 
@@ -196,10 +197,27 @@ function App() {
     <div className="main-app">
       <h1>CoffeeManager</h1>
       <div>{currentAccount ? currentAccount : connectWalletButton()}</div>
-      <div style={{ marginTop: "100px", fontSize: "24px" }}>
+      <div style={{ marginTop: "50px", fontSize: "24px" }}>
         Coffee Count: {amount}
       </div>
-      <div style={{ marginTop: "50px" }}>
+      <div style={{ width: "60%", margin: "auto", marginTop: "100px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div>Address</div>
+          <div>Amount</div>
+        </div>
+
+        {Coffee.data !== undefined &&
+          Coffee.data.coffees.length > 0 &&
+          Coffee.data.coffees.map((item) => {
+            return (
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>{item.addr}</div>
+                <div>{item.amount}</div>
+              </div>
+            );
+          })}
+      </div>
+      <div style={{ marginTop: "100px" }}>
         Address:{" "}
         <input
           type="text"
